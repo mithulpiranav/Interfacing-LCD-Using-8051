@@ -18,28 +18,69 @@ To interface a 16x2 LCD with an 8051 microcontroller and display your name.
 
 ## Program :
 ```
-#include<reg51.h>
+#include <reg51.h>
+sbit rs=P1^0;
+sbit rw=P1^1;
+sbit en=P1^2;
+void lcdcmd(unsigned char);
+void lcddat(unsigned char);
+void delay();
 void main()
 {
-unsigned char x,y;
-unsigned int i;
-P1=0x00;
-while(1)
-	{   
-	x=0x01;
-	for(y=0;y<8;y++)	
-		{
-		P1=x;
-    for(i=0;i<60000;i++);
-    x=x<<1;
-    }			
-	}	
+	P2=0x000;
+	while(1)
+	{
+	lcdcmd(0x38);
+	delay();
+	lcdcmd(0x01);
+	delay();
+	lcdcmd(0x10);
+	delay();
+	lcdcmd(0x0c);
+	delay();
+	lcdcmd(0x81);
+	delay();
+	lcddat('M');
+	delay();
+	lcddat('I');
+	delay();
+	lcddat('P');
+	delay();
+	}
 }
+
+void lcdcmd(unsigned char val)
+{
+P2= val;
+rs=0;
+rw=0;
+en=1;
+delay();
+en=0;
+}
+void lcddat(unsigned char val)
+{
+P2= val;
+rs=1;
+rw=0;
+en=1;
+delay();
+en=0;
+}
+void delay()
+{
+unsigned int i;
+for(i=0;i<12000;i++);
+
+}
+
+
+	
 ```
 
 
 ## Output :
-<img width="1236" height="716" alt="image" src="https://github.com/user-attachments/assets/7ad2818c-bcc7-43e8-ac67-e95965281fd4" />
+<img width="1419" height="894" alt="image" src="https://github.com/user-attachments/assets/26822239-58d7-4d48-930c-563ae9430273" />
 
 
 ## Result :  
